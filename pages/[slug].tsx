@@ -130,7 +130,7 @@ const Post: React.FC<{ post: Post }> = (props) => {
               __html: post.excerpt,
             }}
           />
-          <div className="ads1">{/* <GoogleAd /> */}</div>
+          <div className="ads1">{<GoogleAd />}</div>
 
           <div
             className="body-post"
@@ -149,7 +149,7 @@ const Post: React.FC<{ post: Post }> = (props) => {
               />
             </FacebookProvider>
           </div>
-          <div className="ads1">{/* <InArticleAd /> aaaa*/}</div>
+          <div className="ads1">{<InArticleAd />}</div>
         </div>
 
         <h3>Share This Post</h3>
