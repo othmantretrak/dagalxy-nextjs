@@ -24,12 +24,6 @@ async function getPost(slug: string) {
     }).populate({ path: "articles", options: { limit: 6 } });
     article.cat.articles = articlecat.articles;
     //console.log(article.cat.articles);
-    console.log(
-      "article name:",
-      article.title,
-      "article cat:",
-      article.cat.titlte
-    );
 
     const res = JSON.parse(JSON.stringify(article));
 
@@ -76,7 +70,6 @@ const Post: React.FC<{ post: Post }> = (props) => {
   const [enableLoadComments, setEnableLoadComments] = useState<boolean>(true);
 
   const router = useRouter();
-  console.log(router.query);
 
   if (router.isFallback) {
     return <h1>Loading...</h1>;
@@ -90,7 +83,7 @@ const Post: React.FC<{ post: Post }> = (props) => {
     };
 
     const script = document.createElement("script");
-    script.src = "https://ghostcms-nextjs.disqus.com/embed.js";
+    script.src = "https://dagalaxy.disqus.com/embed.js";
     script.setAttribute("data-timestamp", Date.now().toString());
 
     document.body.appendChild(script);
@@ -165,7 +158,9 @@ const Post: React.FC<{ post: Post }> = (props) => {
           title={post.title}
           url={`https://dagalaxy.com/${router.query.slug}`}
         />
+        {enableLoadComments && <p onClick={loadComments}>Load Comments</p>}
 
+        <div id="disqus_thread"></div>
         <RelatedPost related={related} />
         {post.tags.length > 0 && (
           <>
@@ -186,10 +181,6 @@ const Post: React.FC<{ post: Post }> = (props) => {
       </div>
 
       {/* <div dangerouslySetInnerHTML={{ __html: post.html }}></div> */}
-
-      {enableLoadComments && <p onClick={loadComments}>Load Comments</p>}
-
-      <div id="disqus_thread"></div>
     </Layout>
   );
 };
