@@ -149,7 +149,7 @@ const Post: React.FC<{ post: Post }> = (props) => {
               />
             </FacebookProvider>
           </div>
-          <div className="ads1">{/* <InArticleAd /> */}</div>
+          <div className="ads1">{/* <InArticleAd /> aaaa*/}</div>
         </div>
 
         <h3>Share This Post</h3>
