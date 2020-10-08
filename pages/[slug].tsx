@@ -24,6 +24,13 @@ async function getPost(slug: string) {
     }).populate({ path: "articles", options: { limit: 6 } });
     article.cat.articles = articlecat.articles;
     //console.log(article.cat.articles);
+    console.log(
+      "article name:",
+      article.title,
+      "article cat:",
+      article.cat.titlte
+    );
+
     const res = JSON.parse(JSON.stringify(article));
 
     return res;
@@ -63,7 +70,7 @@ export type Post = {
 
 const Post: React.FC<{ post: Post }> = (props) => {
   const { post } = props;
-  const related = post.cat.articles;
+  const related = post?.cat.articles;
   //console.log(props);
 
   const [enableLoadComments, setEnableLoadComments] = useState<boolean>(true);
