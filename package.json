@@ -8,9 +8,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "mongoose": "^5.10.8",
     "next": "9.5.2",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-facebook": "^8.1.4",
+    "react-share": "^4.3.0"
   },
   "devDependencies": {
     "@types/node": "^14.0.27",

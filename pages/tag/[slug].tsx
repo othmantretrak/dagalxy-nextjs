@@ -1,47 +1,49 @@
+import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import connectDB from "../config/db";
-import Layout from "../components/layout";
-import { Article } from "../models/Article";
-import { Cat } from "../models/Cat";
+import { useRouter } from "next/router";
 
-//const { BLOG_URL, CONTENT_API_KEY } = process.env;
+import { Article } from "../../models/Article";
+import Layout from "../../components/layout";
+import { PostType } from "../index";
+//const { BLOG_URL, CONTENT_API_KEY } = process.env
 
-export type PostType = {
-  id: string;
-  title: string;
-  slug: string;
-  imgUri: string;
-  cat: {
-    title: string;
-    slug: string;
-  };
-};
+async function getPost(slug: string) {
+  const articles = await Article.find({ tags: slug });
 
-async function getPosts() {
-  // curl ""
-  await connectDB();
-  let articles = await Article.find()
-    .limit(2)
-    .sort({ createdAt: "desc" })
-    .populate("cat");
-
-  //console.log(articles);
   const res = JSON.parse(JSON.stringify(articles));
-  //console.log(res);
+
   return res;
 }
 
+// Ghost CMS Request
 export const getStaticProps = async ({ params }) => {
-  const posts = await getPosts();
+  const posts = await getPost(params.slug);
   return {
-    revalidate: 1000,
     props: { posts },
+    revalidate: 1000,
   };
 };
 
-const Home: React.FC<{ posts: PostType[] }> = (props) => {
+export const getStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};
+
+const Tag: React.FC<{ posts: [PostType] }> = (props) => {
+  //console.log(props);
+
   const { posts } = props;
+  const [enableLoadComments, setEnableLoadComments] = useState<boolean>(true);
+
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <Layout>
       <Head>
@@ -50,7 +52,7 @@ const Home: React.FC<{ posts: PostType[] }> = (props) => {
 
       <div className="wrap">
         <h2 className="heading-h2">
-          <span className="heading-span">Blogs</span>
+          <span className="heading-span">{router.query.slug}</span>
         </h2>
         <div className="card-list">
           {posts.map((edge) => {
@@ -86,14 +88,6 @@ const Home: React.FC<{ posts: PostType[] }> = (props) => {
                   </Link>
 
                   <div className="meta">
-                    <Link
-                      href="/category/[slug]"
-                      as={`/category/${edge.cat.slug}`}
-                    >
-                      <a>
-                        <span>{edge.cat.title}</span>
-                      </a>
-                    </Link>
                     <span>More...</span>
                   </div>
                 </div>
@@ -106,4 +100,4 @@ const Home: React.FC<{ posts: PostType[] }> = (props) => {
   );
 };
 
-export default Home;
+export default Tag;
